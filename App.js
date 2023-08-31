@@ -11,23 +11,26 @@ import {
 import { theme } from './color';
 import { useEffect, useState } from 'react';
 import { Fontisto } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { loadFromStorageAndSetter, saveToStorage } from './storage';
 
 const STORAGE_KEY = '@todos';
+const TAB_KEY = '@working';
 
 export default function App() {
   const [working, setWorking] = useState(true);
   const [text, setText] = useState('');
   const [todos, setTodos] = useState({});
-  const travel = () => setWorking(false);
-  const work = () => setWorking(true);
+  const travel = () => {
+    setWorking(false);
+    saveToStorage(TAB_KEY, false);
+  };
+  const work = () => {
+    setWorking(true);
+    saveToStorage(TAB_KEY, true);
+  };
   const onChangeText = (e) => setText(e);
   const saveTodos = async (toSave) => {
-    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
-  };
-  const loadTodos = async () => {
-    const s = await AsyncStorage.getItem(STORAGE_KEY);
-    setTodos(JSON.parse(s));
+    await saveToStorage(STORAGE_KEY, toSave);
   };
   const addTodo = async () => {
     if (text === '') return;
@@ -58,7 +61,8 @@ export default function App() {
 
   useEffect(() => {
     try {
-      loadTodos();
+      loadFromStorageAndSetter(STORAGE_KEY, '{}', setTodos);
+      loadFromStorageAndSetter(TAB_KEY, 'true', setWorking);
     } catch (e) {
       console.error(e);
     }
@@ -148,3 +152,8 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
+
+/**
+ * @todo
+ * [ ] - Create completion and editing functionality
+ */

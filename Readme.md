@@ -41,6 +41,8 @@ Object.keys(x).map(key=>x[key]);
 expo install @react-native-async-storage/async-storage
 ```
 
+- AsyncStorage.clear()
+
 ## try-catch
 
 - you need to do this always
