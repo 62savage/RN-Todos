@@ -14,3 +14,4 @@
 - onChangeText
 - keyboardType : "number-pad", "email-address"
 - returnKeyType : "send"
+- onSubmitEdditing
