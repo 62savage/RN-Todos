@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   TextInput,
+  ScrollView,
 } from 'react-native';
 import { theme } from './color';
 import { useState } from 'react';
@@ -54,6 +55,13 @@ export default function App() {
           style={styles.input}
         />
       </View>
+      <ScrollView>
+        {Object.keys(todos).map((key) => (
+          <View style={styles.todo}>
+            <Text style={styles.todoText}>{todos[key].text}</Text>
+          </View>
+        ))}
+      </ScrollView>
     </View>
   );
 }
@@ -79,6 +87,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 30,
     fontSize: 18,
-    marginTop: 20,
+    marginVertical: 20,
+  },
+  todo: {
+    backgroundColor: theme.todoBg,
+    marginBottom: 10,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    borderRadius: 15,
+  },
+  todoText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '500',
   },
 });
