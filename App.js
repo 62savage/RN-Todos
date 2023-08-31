@@ -8,7 +8,10 @@ import {
   ScrollView,
 } from 'react-native';
 import { theme } from './color';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const STORAGE_KEY = '@todos';
 
 export default function App() {
   const [working, setWorking] = useState(true);
@@ -17,15 +20,27 @@ export default function App() {
   const travel = () => setWorking(false);
   const work = () => setWorking(true);
   const onChangeText = (e) => setText(e);
-  const addTodo = () => {
+  const saveTodos = async (toSave) => {
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
+  };
+  const loadTodos = async () => {
+    const s = await AsyncStorage.getItem(STORAGE_KEY);
+    setTodos(JSON.parse(s));
+  };
+  const addTodo = async () => {
     if (text === '') return;
     const newTodos = Object.assign({}, todos, {
-      [Date.now()]: { text, work: working },
+      [Date.now()]: { text, working },
     });
     setTodos(newTodos);
+    await saveTodos(newTodos);
     setText('');
   };
-  console.log(todos);
+
+  useEffect(() => {
+    loadTodos();
+  }, []);
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -56,11 +71,13 @@ export default function App() {
         />
       </View>
       <ScrollView>
-        {Object.keys(todos).map((key) => (
-          <View style={styles.todo}>
-            <Text style={styles.todoText}>{todos[key].text}</Text>
-          </View>
-        ))}
+        {Object.keys(todos).map((key) =>
+          todos[key].working === working ? (
+            <View style={styles.todo} key={key}>
+              <Text style={styles.todoText}>{todos[key].text}</Text>
+            </View>
+          ) : null
+        )}
       </ScrollView>
     </View>
   );

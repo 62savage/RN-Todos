@@ -34,3 +34,13 @@ console.log(target);
 ```
 Object.keys(x).map(key=>x[key]);
 ```
+
+## Async-Storage
+
+```
+expo install @react-native-async-storage/async-storage
+```
+
+## try-catch
+
+- you need to do this always
