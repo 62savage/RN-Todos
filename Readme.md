@@ -44,3 +44,25 @@ expo install @react-native-async-storage/async-storage
 ## try-catch
 
 - you need to do this always
+
+## Alert API
+
+```
+Alert.alert('Delete todo', 'Are you sure?', [
+      { text: 'Cancel' },
+      {
+        text: "I'm Sure",
+        style: 'destructive',
+        onPress: () => {
+          const newTodos = { ...todos };
+          delete newTodos[key];
+          setTodos(newTodos);
+          saveTodos(newTodos);
+        },
+      },
+    ]);
+```
+
+## icons
+
+[icons.expo.fyi](icons.expo.fyi)
